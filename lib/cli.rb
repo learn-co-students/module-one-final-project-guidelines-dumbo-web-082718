@@ -25,6 +25,5 @@ end
 def print_foodtrucks
 # table = TTY::Table.new ['header1','header2'], [['a1', 'a2'], ['b1', 'b2']]
 # table.render(:ascii)
-tp Foodtruck.all
-halalguys.reviews.each { |review| puts review.rating }
+tp Foodtruck.all, "name", "avg_rating"
 end
