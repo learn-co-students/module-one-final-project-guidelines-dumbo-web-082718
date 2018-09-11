@@ -1,14 +1,14 @@
 require_relative '../config/environment'
 
-def run
 
-initialize_user #finds or creates user and sets them equal to the current user
 
-  # loop do #main input loop
-  #   what_do
-  # end
-end
+initialize_user
+# binding.pry
+#
+# 0
 
-binding.pry
+program_loop
 
-0
+# binding.pry
+#
+# 0

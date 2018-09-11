@@ -28,12 +28,7 @@ As a user, I want to be able to leave and read reviews on food trucks.
 
 # TODO
 
-
-# FOOD TRUCK LIST
-
-NAME | AVERAGE REVIEW | NEIGHBORHOOD | CUISINE TYPE
-
-
-# REVIEW LISTING
-
-TITLE | REVIEW | COMMENT
+LATER GOALS:
+implement password / login system
+add neighborhood and cuisine types to food truck and allow searches based on them
+seed database with placeholder data from Faker gem
