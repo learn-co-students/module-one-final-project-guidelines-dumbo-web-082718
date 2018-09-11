@@ -1,2 +1,4 @@
 class User < ActiveRecord::Base
-end 
+  has_many :lists
+  has_many :movies, through: :lists
+end
