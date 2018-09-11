@@ -1,6 +1,6 @@
-class List < ActiveRecord::Base
-  belongs_to :users
-  belongs_to :movies
+class ListItems < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :movie
 
   def show_a_users_lists
     #will show the user all of their list/queues.
@@ -13,12 +13,14 @@ class List < ActiveRecord::Base
   def remove_movie
     #removes a movie from their list/queue.
   end
+  #
+  # def add_movie(user_id, movie_id)
+  #   #adds a movie to their list/queue.
+  #   (user_id, movie_id)
 
-  def add_movie
-    #adds a movie to their list/queue.
-  end
 
   def pick_random_movie
     #picks a random movie from a given list
   end
+
 end

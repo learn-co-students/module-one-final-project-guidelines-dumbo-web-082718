@@ -1,14 +1,23 @@
 class User < ActiveRecord::Base
-  has_many :lists
-  has_many :movies, through: :lists
+  has_many :list_items
+  has_many :movies, through: :list_items
 
 
-  def create_movie
-    #user can input movie's attributes and this method will create
-    #a new movie which puts it in the database and is also added to the
-    #user's list.
+  def show_movies_in_user_list
+    #will show all movies in a user's list
+    ListItems.all.select do |list|
+      list.user_id == self
+    end
   end
 
-  
+  def remove_movie_in_user_list
+    #removes a movie from their list/queue.
+
+  end
+
+  # def add_movie_to_database(movie_id)
+  #   ListItems.create(movie_id, self)
+  # end
+
 
 end

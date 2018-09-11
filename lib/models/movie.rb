@@ -1,4 +1,4 @@
 class Movie < ActiveRecord::Base
-  has_many :lists
-  has_many :users, through: :lists
+  has_many :list_items
+  has_many :users, through: :list_items
 end
