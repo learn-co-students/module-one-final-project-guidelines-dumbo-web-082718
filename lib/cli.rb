@@ -1,14 +1,9 @@
-Prompt = "Input > "
-
-
-
 def initialize_user
-  #ask for sign in or create account
   puts "Welcome to FoodTruck Finder"
   prompt = TTY::Prompt.new
   case prompt.select("Choose an option:", %w(Login Create\ account Exit))
     when "Login"
-      # login
+      login
     when "Create account"
       create_account
     when "Exit"
@@ -17,7 +12,20 @@ def initialize_user
 end
 
 def login
+  login_user = loop do
+    login_username=TTY::Prompt.new.ask('Username:')
+    user_check = User.find_by(username:login_username)
+    break user_check unless user_check == nil
+    puts "That username does not exist."
+  end
 
+  loop do
+    password = TTY::Prompt.new.mask('Password:')
+    break if password == login_user.password
+    puts "Your password is incorrect."
+  end
+
+  $program_user = login_user
 end
 
 def create_account
@@ -54,21 +62,21 @@ def program_loop
 end
 
 def main_what_do
-prompt = TTY::Prompt.new
-prompt.select("What would you like to view?", %w(User Food\ Trucks Reviews Exit))
+  prompt = TTY::Prompt.new
+  prompt.select("What would you like to view?", %w(User Food\ Trucks Reviews Exit))
 end
 
 def user_what_do
   prompt = TTY::Prompt.new
-  prompt.select("Where would you like to go?", %w(Change\ Name Back))
+  prompt.select("Where would you like to go?", %w(Change\ first\ name Back))
 end
 
 
 def user_loop
   loop do
-    puts "Username: #{$program_user.username}"
+    puts "Username: #{$program_user.username} | First name: #{$program_user.first_name} | Last name: #{$program_user.last_name}"
     case user_what_do
-    when "Change Name"
+    when "Change first name"
       name = TTY::Prompt.new
       new_name = name.ask('What is your new first name?', default: $program_user.first_name)
       $program_user.first_name = new_name
@@ -144,5 +152,5 @@ def valid_truck?
 end
 
 def print_foodtrucks
-tp Foodtruck.all, "name", "avg_rating", "neighborhood", "cuisine"
+  tp Foodtruck.all, "name", "neighborhood", "cuisine"
 end

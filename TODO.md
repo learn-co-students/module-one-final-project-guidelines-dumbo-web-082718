@@ -9,7 +9,5 @@ As a user, I want to be able to leave and read reviews on food trucks.
 # TODO
 
 LATER GOALS:
-implement password / login system
-seed database with placeholder data from Faker gem
 make things look nicer - clear terminal after certain actions
-make columns look nicer? 
+make columns look nicer?
