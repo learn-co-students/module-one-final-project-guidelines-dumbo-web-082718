@@ -9,8 +9,7 @@ def initialize_user
      YP    88   YD ~Y8888P'  `Y88P' YP   YD      Y888888P    YP
   ASCII
 
-  prompt = TTY::Prompt.new
-  case prompt.select("Choose an option:", %w(Login Create\ account Exit))
+  case TTY::Prompt.new.select("Choose an option:", %w(Login Create\ account Exit))
     when "Login"
       login
     when "Create account"
@@ -20,9 +19,10 @@ def initialize_user
   end
 end
 
+
 def login
   login_user = loop do
-    login_username=TTY::Prompt.new.ask('Username:')
+    login_username = TTY::Prompt.new.ask('Username:')
     user_check = User.find_by(username:login_username)
     break user_check unless user_check == nil
     puts "That username does not exist."
@@ -35,7 +35,9 @@ def login
   end
 
   $program_user = login_user
+
 end
+
 
 def create_account
   username = loop do
@@ -50,6 +52,7 @@ def create_account
   #print ask yes/no
   $program_user = User.create(username:username,first_name:firstname,last_name:lastname,password:password)
 end
+
 
 def delete_account
   if TTY::Prompt.new.yes?("Do you really want to delete your account?")
@@ -80,6 +83,7 @@ def program_loop
   exit
 end
 
+
 def main_what_do
   prompt = TTY::Prompt.new
   prompt.select("What would you like to view?", %w(User Food\ Trucks Reviews Exit))
@@ -87,7 +91,7 @@ end
 
 def user_what_do
   prompt = TTY::Prompt.new
-  prompt.select("What would you like to do?", %w(Change\ first\ name Delete\ Account Back))
+  prompt.select("What would you like to do?", %w(Change\ First\ Name Change\ Last\ Name Change\ Password Delete\ Account Back))
 end
 
 
@@ -95,11 +99,22 @@ def user_loop
   loop do
     puts "Username: #{$program_user.username} | First name: #{$program_user.first_name} | Last name: #{$program_user.last_name}"
     case user_what_do
-    when "Change first name"
-      name = TTY::Prompt.new
-      new_name = name.ask('What is your new first name?', default: $program_user.first_name)
+    when "Change First Name"
+      new_name = TTY::Prompt.new.ask('What is your new first name?', default: $program_user.first_name)
       $program_user.first_name = new_name
       $program_user.save
+    when "Change Last Name"
+      last_name= TTY::Prompt.new.ask('What is your new last name?', default: $program_user.last_name)
+      $program_user.last_name = last_name
+      $program_user.save
+    when "Change Password"
+      loop do
+        password = TTY::Prompt.new.mask('Insert current password:')
+        break if password == $program_user.password
+        puts "Your password is incorrect."
+      end
+        new_password = TTY::Prompt.new.mask('Insert new password:')
+        $program_user.password = new_password
     when "Delete Account"
       delete_account
     when "Back"
@@ -108,10 +123,12 @@ def user_loop
   end
 end
 
+
 def foodtruck_what_do
   prompt = TTY::Prompt.new
   prompt.select("What would you like to do?", %w(View\ All Search\ By\ Name Search\ by\ Neighborhood Search\ By\ Cuisine Back))
 end
+
 
 def foodtruck_loop
   loop do
@@ -136,6 +153,7 @@ def foodtruck_loop
   end
 end
 
+
 def review_loop
   loop do
     case review_what_do
@@ -151,10 +169,12 @@ def review_loop
   end
 end
 
+
 def review_what_do
   prompt = TTY::Prompt.new
   prompt.select("What would you like to do?", %w(View\ Your\ Reviews View\ All\ Reviews Create\ Review Back))
 end
+
 
 def create_review
   food_truck = valid_truck?
@@ -165,6 +185,7 @@ def create_review
   Review.create(title:title,rating:rating,comment:comment,user_id:$program_user.id,foodtruck_id:food_truck.id)
 end
 
+
 def valid_truck?
   loop do
     food_truck_name=TTY::Prompt.new.ask('Food truck name:')
@@ -173,6 +194,7 @@ def valid_truck?
     puts "Please enter a valid truck name."
   end
 end
+
 
 def print_foodtrucks
   tp Foodtruck.all, "name", "avg_rating", "neighborhood", "cuisine"
