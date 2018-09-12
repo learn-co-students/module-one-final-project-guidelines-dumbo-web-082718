@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   def show_movies_in_user_list
     #will show all movies in a user's list(titles)
-    movies.map do |movie|
+     movies.map do |movie|
       movie.title
     end
   end
@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
     found_list_item = self.list_items.find do |list_item|
       list_item.movie.title == movie
     end
-    found_list_item.destroy
+    found_list_item.delete
   end
 
   def pick_random_movie

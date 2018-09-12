@@ -35,12 +35,12 @@ while true
     puts user_name.show_movies_in_user_list
   elsif user_choice == options.values[4]
     genre = prompt.select("Select a genre:", %w(Comedy Sci-Fi Horror Romance Action Thriller Drama Mystery Crime Animation Adventure Fantasy Comedy-Romance Action-Comedy SuperHero))
-    if user_name.show_by_genre(genre) == nil
-      puts "YOU DO NOT HAVE ANY MOVIES SAVED WITH THIS GENRE."
+    movies_with_genre = user_name.show_by_genre(genre)
+    if movies_with_genre.empty?
+      puts "YOU DO NOT HAVE ANY MOVIES SAVED WITH THIS GENRE"
     else
-      puts user_name.show_by_genre(genre)
+      puts movies_with_genre
     end
-
   elsif user_choice == options.values[5]
     puts Movie.show_all_movies_in_database
   elsif user_choice == options.values[6]

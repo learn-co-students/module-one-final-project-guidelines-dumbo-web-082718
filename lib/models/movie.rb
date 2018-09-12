@@ -4,7 +4,7 @@ class Movie < ActiveRecord::Base
 
   def self.show_all_movies_in_database
     self.all.map do |movie|
-      movie.title
-    end  
+      "TITLE #{movie.title}, GENRE #{movie.genre}, RELEASE YEAR #{movie.release_year}"
+    end
   end
 end
