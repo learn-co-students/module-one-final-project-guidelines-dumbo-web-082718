@@ -2,16 +2,10 @@ def introduction
   puts "Hello, welcome to MovieQueueApp™."
 end
 
-def option_one
+def get_user_name
   puts "Please enter your username:"
   name = gets.chomp.downcase
-  User.all.find_by(name: name)
-end
-
-def option_two
-  puts "Please enter a new username:"
-  name = gets.chomp.downcase
-  User.create(name: name)
+  User.all.find_or_create_by(name: name)
 end
 
 def options

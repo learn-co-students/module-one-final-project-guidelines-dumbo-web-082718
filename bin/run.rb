@@ -1,21 +1,16 @@
 require_relative '../config/environment'
 require_relative '../snippets/cli_methods.rb'
 
-
 introduction
-sleep(1)
-prompt = TTY::Prompt.new
-one_or_two = prompt.select("Choose '1' if you're an existing user or '2' to create a new account:", %w(1 2))
 
-if one_or_two == '1'
-  sleep(1)
-   user_name = option_one
- elsif one_or_two == '2'
-   sleep(1)
-   user_name = option_two
-end
+sleep(1)
+
+prompt = TTY::Prompt.new
+
+user_name = get_user_name
 
 puts  "Hey #{user_name.name}!"
+
 sleep(1)
 
 while true
@@ -28,11 +23,23 @@ while true
     user_name.add_movie_to_database_and_queue(title, genre, release_year)
   elsif user_choice == options.values[1]
      movie = prompt.ask('Enter a movie title to remove:')
-     user_name.remove_movie_in_user_list(movie)
+     if user_name.show_movies_in_user_list.empty?
+       puts "YOU DO NOT HAVE ANY MOVIES SAVED IN YOUR QUEUE"
+     else
+       user_name.remove_movie_in_user_list(movie)
+     end
   elsif user_choice == options.values[2]
-     puts user_name.pick_random_movie.title
+    if user_name.show_movies_in_user_list.empty?
+      puts "YOU DO NOT HAVE ANY MOVIES SAVED IN YOUR QUEUE"
+    else
+      puts user_name.pick_random_movie.title
+    end
   elsif user_choice == options.values[3]
-    puts user_name.show_movies_in_user_list
+    if user_name.show_movies_in_user_list.empty?
+      puts "YOU DO NOT HAVE ANY MOVIES SAVED IN YOUR QUEUE"
+    else
+      puts user_name.show_movies_in_user_list
+    end
   elsif user_choice == options.values[4]
     genre = prompt.select("Select a genre:", %w(Comedy Sci-Fi Horror Romance Action Thriller Drama Mystery Crime Animation Adventure Fantasy Comedy-Romance Action-Comedy SuperHero))
     movies_with_genre = user_name.show_by_genre(genre)

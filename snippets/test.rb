@@ -60,3 +60,16 @@
 #   -Type 'genre' to show movies in your queue by genre.
 #   -Type 'movies' to show all movies in database." #think of another word besides database
 # end
+
+# one_or_two = prompt.select("Choose '1' if you're an existing user or '2' to create a new account:", %w(1 2))
+
+# if one_or_two == '1'
+#   sleep(1)
+#   user_name = option_one
+#  elsif one_or_two == '2'
+#   sleep(1)
+#   user_name = option_two
+# end
+
+# user_name = prompt.ask('Please enter your name:')
+# User.all.find_or_create_by(name: name)
