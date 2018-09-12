@@ -10,7 +10,3 @@ As a user, I want to be able to leave and read reviews on food trucks.
 
 LATER GOALS:
 coherent voice for prompt messages (capitalization, etc)
-food class, Name, Price, Category, Foodtruck_id
-neighborhood menu
-cuisine menu
-food menus (like, a list of food!) for trucks

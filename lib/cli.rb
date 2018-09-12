@@ -149,25 +149,6 @@ def foodtruck_loop
   end
 end
 
-# def search_by_neighborhood
-#   neighborhood_array = Foodtruck.all.map {|foodtruck| foodtruck.neighborhood}.uniq
-#   neighborhood_do = TTY::Prompt.new.select("Select a neighborhood", neighborhood_array, "Back")
-#   if neighborhood_do == "Back"
-#     return
-#   else
-#     select_foodtruck(neighborhood:neighborhood_do)
-#   end
-# end
-#
-# def search_by_cuisine
-#   cuisine_array = Foodtruck.all.map {|foodtruck| foodtruck.cuisine}.uniq
-#   cuisine_do = TTY::Prompt.new.select("Select a cuisine", cuisine_array, "Back")
-#   if cuisine_do == "Back"
-#     return
-#   else
-#     select_foodtruck(cuisine:cuisine_do)
-#   end
-# end
 
 def search_by(arg)
   array = Foodtruck.all.map {|foodtruck| foodtruck.send arg }.uniq.sort
@@ -179,17 +160,48 @@ def search_by(arg)
   end
 end
 
+
 def select_foodtruck(arg)
   foodtruck_array = Foodtruck.where(arg).map { |foodtruck| foodtruck.name }
   foodtruck_do = TTY::Prompt.new.select("Select a foodtruck:", foodtruck_array, "Back")
   if foodtruck_do == "Back"
     return
   else
-    # calls a method that displays the food truck's options "view menu" ""
-    puts "truck off"
+    truck = Foodtruck.find_by(name:foodtruck_do)
+    foodtruck_detail_menu(truck)
   end
 end
-# foodtruck_array = Foodtruck.where(neighborhood:neighborhood_do).map { |foodtruck| foodtruck.name }
+
+
+def foodtruck_detail_menu(truck)
+  loop do
+    puts "Name: #{truck.name} | Average Rating: #{truck.avg_rating} | Neighborhood: #{truck.neighborhood} | Cuisine: #{truck.cuisine}"
+    foodtruck_deetz = TTY::Prompt.new.select("What would you like to do?", ["View Menu", "See Reviews", "Leave Review", "Back"])
+    case foodtruck_deetz
+      when "View Menu"
+        view_menu(truck)
+      when "See Reviews"
+        #see reviews
+      when "Leave Review"
+        create_review
+      when "Back"
+        break
+    end
+  end
+end
+
+def view_menu(truck)
+  puts "Appetizers"
+  tp truck.foods.where(category:"Appetizer"), "name", "price"
+  puts "Lunch"
+  tp truck.foods.where(category:"Lunch"), "name", "price"
+  puts "Dinner"
+  tp truck.foods.where(category:"Dinner"), "name", "price"
+  puts "Dessert"
+  tp truck.foods.where(category:"Dessert"), "name", "price"
+end
+
+
 
 def review_loop
   loop do

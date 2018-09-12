@@ -1,5 +1,6 @@
 class Foodtruck < ActiveRecord::Base
   has_many :reviews
+  has_many :foods
 
   def avg_rating
     sum = 0
