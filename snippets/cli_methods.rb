@@ -17,14 +17,10 @@ def option_two
   User.create(name: new_name)
 end
 
-puts "Invalid input. Press 1 if you are an existing user and 2 to create a new account."
-
-
 def user_options(name)
   puts "Welcome #{name}! what would you like to do?
-  -Type 'update' to update
-  -type add to add movie to a list
-  -type add list add new list
-  -choose a random movie from your queue
-  -delete a list" #their own list
+  -Type 'add' to add movie to your queue.
+  -Type 'remove' to remove a movie from your queue.
+  -Type 'random' to choose a random movie from your queue.
+  -Type 'all' to see all movies in your queue."
 end

@@ -6,7 +6,7 @@ introduction
 user_input = gets.chomp
 
 case user_input
-  when user_input == '1'
+when user_input == '1'
     option_one
   when user_input =='2'
     option_two
