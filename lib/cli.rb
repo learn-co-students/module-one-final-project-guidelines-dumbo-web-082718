@@ -1,5 +1,14 @@
 def initialize_user
-  puts "Welcome to FoodTruck Finder"
+  puts <<-ASCII
+                           - WELCOME TO -
+  d888888b d8888b. db    db  .o88b. db   dD      d888888b d888888b
+  `~~88~~' 88  `8D 88    88 d8P  Y8 88 ,8P'        `88'   `~~88~~'
+     88    88oobY' 88    88 8P      88,8P           88       88
+     88    88`8b   88    88 8b      88`8b           88       88
+     88    88 `88. 88b  d88 Y8b  d8 88 `88.        .88.      88
+     YP    88   YD ~Y8888P'  `Y88P' YP   YD      Y888888P    YP
+  ASCII
+
   prompt = TTY::Prompt.new
   case prompt.select("Choose an option:", %w(Login Create\ account Exit))
     when "Login"
@@ -42,7 +51,17 @@ def create_account
   $program_user = User.create(username:username,first_name:firstname,last_name:lastname,password:password)
 end
 
+def delete_account
+  if TTY::Prompt.new.yes?("Do you really want to delete your account?")
+    $program_user.reviews.delete_all
+    $program_user.delete
+    puts "Goodbye forever!"
 
+    exit
+  else
+    puts ":)"
+  end
+end
 
 
 def program_loop
@@ -68,7 +87,7 @@ end
 
 def user_what_do
   prompt = TTY::Prompt.new
-  prompt.select("Where would you like to go?", %w(Change\ first\ name Back))
+  prompt.select("What would you like to do?", %w(Change\ first\ name Delete\ Account Back))
 end
 
 
@@ -81,6 +100,8 @@ def user_loop
       new_name = name.ask('What is your new first name?', default: $program_user.first_name)
       $program_user.first_name = new_name
       $program_user.save
+    when "Delete Account"
+      delete_account
     when "Back"
       break
     end
@@ -120,6 +141,8 @@ def review_loop
     case review_what_do
     when "View Your Reviews"
       tp Review.where(user_id:$program_user.id)
+    when "View All Reviews"
+      tp Review.all, "title", "rating", "comment", "user.username", "foodtruck.name"
     when "Create Review"
       create_review
     when "Back"
@@ -130,7 +153,7 @@ end
 
 def review_what_do
   prompt = TTY::Prompt.new
-  prompt.select("What would you like to do?", %w(View\ Your\ Reviews Create\ Review Back))
+  prompt.select("What would you like to do?", %w(View\ Your\ Reviews View\ All\ Reviews Create\ Review Back))
 end
 
 def create_review
@@ -152,5 +175,5 @@ def valid_truck?
 end
 
 def print_foodtrucks
-  tp Foodtruck.all, "name", "neighborhood", "cuisine"
+  tp Foodtruck.all, "name", "avg_rating", "neighborhood", "cuisine"
 end
