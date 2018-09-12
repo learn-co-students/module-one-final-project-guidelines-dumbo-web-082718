@@ -24,12 +24,12 @@ class User < ActiveRecord::Base
 
   def add_movie(title, genre, release_year)
     #adds a movie to the database
-    Movie.create(title: title, genre: genre, release_year: release_year)
+    Movie.find_or_create_by(title: title, genre: genre, release_year: release_year)
   end
 
   def add_movie_to_database_and_queue(title, genre, release_year)
     new_movie = self.add_movie(title, genre, release_year)
-    ListItem.create(user_id: self.id, movie_id: new_movie.id)
+    ListItem.find_or_create_by(user_id: self.id, movie_id: new_movie.id)
   end
 
   def show_by_genre(genre)
@@ -38,7 +38,5 @@ class User < ActiveRecord::Base
     end
   end
 
-  def show_all_movies_in_database
-    Movie.all
-  end
+
 end
