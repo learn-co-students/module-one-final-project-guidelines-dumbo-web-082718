@@ -33,8 +33,12 @@ class User < ActiveRecord::Base
   end
 
   def show_by_genre(genre)
+    selected_movies =
     movies.select do |movie|
       movie.genre == genre
+    end
+    selected_movies.map do |movie|
+      movie.title
     end
   end
 

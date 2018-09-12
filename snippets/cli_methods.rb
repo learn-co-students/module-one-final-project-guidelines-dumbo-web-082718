@@ -16,8 +16,9 @@ end
 
 def options
   options = {
-    add: "Choose 'add' to add movie to your queue.", remove: "Choose 'remove' to remove a movie from your queue.",
-    random: "Choose 'random' to select a random movie from your queue.", all: "Choose 'all' to see all movies in your queue.",
-    genre: "Choose 'genre', to show all movies in your queue by genre", movies: "Choose 'movies' to show all movies in database."
+    add: "ADD MOVIE TO YOUR QUEUE", remove: "REMOVE A MOVIE FROM YOUR QUEUE",
+    random: "SELECT A RANDOM MOVIE FROM YOUR QUEUE", all: "SEE ALL MOVIES IN YOUR QUEUE",
+    genre: "SEE ALL MOVIES IN YOUR QUEUE BY GENRE", movies: "SHOW ALL MOVIES IN DATABASE",
+    quit: "QUIT"
   }
 end
