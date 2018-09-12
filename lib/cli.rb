@@ -140,19 +140,56 @@ def foodtruck_loop
       food_truck_name=name.ask('Food truck name:')
       tp Foodtruck.where(name:food_truck_name)
     when "Search by Neighborhood"
-      hood = TTY::Prompt.new
-      hood_name=hood.ask('Neighborhood:')
-      tp Foodtruck.where(neighborhood:hood_name)
+      search_by(:neighborhood)
     when "Search By Cuisine"
-      cuisine = TTY::Prompt.new
-      cuisine_name=cuisine.ask('Cuisine:')
-      tp Foodtruck.where(cuisine:cuisine_name)
+      search_by(:cuisine)
     when "Back"
       break
     end
   end
 end
 
+# def search_by_neighborhood
+#   neighborhood_array = Foodtruck.all.map {|foodtruck| foodtruck.neighborhood}.uniq
+#   neighborhood_do = TTY::Prompt.new.select("Select a neighborhood", neighborhood_array, "Back")
+#   if neighborhood_do == "Back"
+#     return
+#   else
+#     select_foodtruck(neighborhood:neighborhood_do)
+#   end
+# end
+#
+# def search_by_cuisine
+#   cuisine_array = Foodtruck.all.map {|foodtruck| foodtruck.cuisine}.uniq
+#   cuisine_do = TTY::Prompt.new.select("Select a cuisine", cuisine_array, "Back")
+#   if cuisine_do == "Back"
+#     return
+#   else
+#     select_foodtruck(cuisine:cuisine_do)
+#   end
+# end
+
+def search_by(arg)
+  array = Foodtruck.all.map {|foodtruck| foodtruck.send arg }.uniq.sort
+  arg_do = TTY::Prompt.new.select("Select a #{arg}", array, "Back")
+  if arg_do == "Back"
+    return
+  else
+    select_foodtruck("#{arg}":arg_do)
+  end
+end
+
+def select_foodtruck(arg)
+  foodtruck_array = Foodtruck.where(arg).map { |foodtruck| foodtruck.name }
+  foodtruck_do = TTY::Prompt.new.select("Select a foodtruck:", foodtruck_array, "Back")
+  if foodtruck_do == "Back"
+    return
+  else
+    # calls a method that displays the food truck's options "view menu" ""
+    puts "truck off"
+  end
+end
+# foodtruck_array = Foodtruck.where(neighborhood:neighborhood_do).map { |foodtruck| foodtruck.name }
 
 def review_loop
   loop do
