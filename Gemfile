@@ -7,4 +7,5 @@ gem "pry"
 gem "require_all"
 gem "table_print"
 gem "tty-prompt"
+gem "tty-table"
 gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'

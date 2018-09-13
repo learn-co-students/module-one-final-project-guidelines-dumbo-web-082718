@@ -8,5 +8,10 @@ As a user, I want to be able to leave and read reviews on food trucks.
 
 # TODO
 
-LATER GOALS:
-coherent voice for prompt messages (capitalization, etc)
+save foodtruck as favorite
+view favorites
+update/delete review through "view all your reviews"
+input validation for account creation
+
+
+MAYBE - scrape food truck websites for real truck info????????

@@ -42,19 +42,22 @@ end
 
 
 def create_account
-  username = loop do
+  loop do
+    username = loop do
+      newusername = Prompt.ask("Create your username:")
+      username_check = User.find_by(username:newusername)
+      break newusername if username_check == nil
+      puts "That username is already taken."
+    end
 
-    newusername = Prompt.ask("Create your username:")
-    username_check = User.find_by(username:newusername)
-    break newusername if username_check == nil
-    puts "That username is already taken."
-
+    firstname = Prompt.ask("Enter your first name:")
+    lastname = Prompt.ask("Enter your last name:")
+    password = Prompt.mask("Create your password:")
+    if Prompt.yes?("Is this information correct?:")
+      $program_user = User.create(username:username,first_name:firstname,last_name:lastname,password:password)
+      break
+    end
   end
-  firstname = Prompt.ask("Enter your first name:")
-  lastname = Prompt.ask("Enter your last name:")
-  password = Prompt.mask("Create your password:")
-  #print ask yes/no
-  $program_user = User.create(username:username,first_name:firstname,last_name:lastname,password:password)
 end
 
 
@@ -84,7 +87,7 @@ def program_loop
       when "Exit"
         break
     end
-    
+
   end
   exit
 end
@@ -169,11 +172,11 @@ def foodtruck_detail_menu(truck_name)
 
     case Prompt.select("What would you like to do?", ["View Menu", "See Reviews", "Leave Review", "Back"])
       when "View Menu"
-        view_menu(truck)
+        menu_table(truck)
       when "See Reviews"
-        #see reviews
+        review_table(truck)
       when "Leave Review"
-        create_review
+        create_review_selected(truck)
       when "Back"
         break
     end
@@ -181,29 +184,31 @@ def foodtruck_detail_menu(truck_name)
 end
 
 
-def view_menu(truck)
-  puts "Appetizers"
-  tp truck.foods.where(category:"Appetizer"), "name", "price"
-  puts "Lunch"
-  tp truck.foods.where(category:"Lunch"), "name", "price"
-  puts "Dinner"
-  tp truck.foods.where(category:"Dinner"), "name", "price"
-  puts "Dessert"
-  tp truck.foods.where(category:"Dessert"), "name", "price"
+def menu_table(truck)
+  table = TTY::Table.new header: ["Name", "Price"]
+  ["Appetizer", "Lunch", "Dinner", "Dessert"].each { |category| category_table("#{category}", truck, table) }
+end
+
+
+def category_table(arg, truck, table)
+  array = truck.foods.where(category: arg).map { |food| [food.name, "$#{food.price}"] }
+  array.each { |food| table << food }
+  puts "- #{arg} - \n"
+  puts table.render(:ascii, column_widths:[30, 10], multiline: true, resize:true) { |renderer| renderer.border.separator = :each_row }
 end
 
 
 def review_loop
   loop do
-    case Prompt..select("What would you like to do?", %w(View\ Your\ Reviews View\ All\ Reviews Create\ Review Back))
-    when "View Your Reviews"
-      tp Review.where(user_id:$program_user.id)
-    when "View All Reviews"
-      tp Review.all, "title", "rating", "comment", "user.username", "foodtruck.name"
-    when "Create Review"
-      create_review
-    when "Back"
-      break
+    case Prompt.select("What would you like to do?", ["View Your Reviews", "View All Reviews", "Create Review", "Back"])
+      when "View Your Reviews"
+        tp Review.where(user_id:$program_user.id)
+      when "View All Reviews"
+        tp Review.all, "title", "rating", "comment", "user.username", "foodtruck.name"
+      when "Create Review"
+        create_review
+      when "Back"
+        break
     end
   end
 end
@@ -218,12 +223,35 @@ def create_review
   Review.create(title:title,rating:rating,comment:comment,user_id:$program_user.id,foodtruck_id:food_truck.id)
 end
 
+def create_review_selected(truck)
+  loop do
+    title = Prompt.ask("Title:")
+    rating = Prompt.ask("Rating from 1-10:") { |q| q.in('1-10') }
+    comment = Prompt.ask("Comment:")
+    if Prompt.yes?("Submit this review for #{truck.name}?:")
+      Review.create(title:title,rating:rating,comment:comment,user_id:$program_user.id,foodtruck_id:truck.id)
+    else
+      break
+    end
+  end
+end
+
 
 def valid_truck?
   loop do
-    food_truck_name=Prompt.new.ask('Food truck name:')
+    food_truck_name=Prompt.ask('Food truck name:')
     food_truck = Foodtruck.find_by(name:food_truck_name)
     break food_truck unless food_truck == nil
     puts "Please enter a valid truck name."
   end
+end
+
+
+def review_table(truck)
+  table = TTY::Table.new header: ["Title", "Rating", "Comment", "User"]
+
+  reviews_array = truck.reviews.map { |review| [review.title, review.rating, review.comment, review.user.username] }
+  reviews_array.each { |review| table << review }
+
+  puts table.render(:ascii, column_widths:[20, 7, 55, 20], multiline: true, resize:true) { |renderer| renderer.border.separator = :each_row }
 end
