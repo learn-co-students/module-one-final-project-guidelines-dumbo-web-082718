@@ -5,7 +5,7 @@ end
 def get_user_name
 puts "Please enter your username:".blue.bold
   while user_input = gets.chomp.downcase
-    if user_input.length >= 4
+    if user_input.strip.length >= 4
       name = user_input
       return User.all.find_or_create_by(name: name)
       break
