@@ -12,13 +12,15 @@ sleep(1)
 while true
   sleep(1)
   user_choice = prompt.select("What would you like to do?".blue.bold, options.values)
-  if user_choice == options.values[0]
+
+  if user_choice == options.values[0] #add
     title = prompt.ask('Enter a movie title:'.blue)
     genre = prompt.select("Select a genre:".blue, genre_array)
     release_year = prompt.ask("Enter movie's release year:".blue)
     user_name.add_movie_to_database_and_queue(title, genre, release_year)
     puts "#{title} was added to your queue!".green.bold
-  elsif user_choice == options.values[1]
+
+  elsif user_choice == options.values[1] #remove
     movie = prompt.ask('Enter a movie title to remove:'.blue)
     if user_name.show_movies_in_user_list.empty?
       error_message
@@ -27,21 +29,21 @@ while true
       puts "#{movie} was removed from your queue!".green.bold
     end
 
-  elsif user_choice == options.values[2]
+  elsif user_choice == options.values[2] #random
     if user_name.show_movies_in_user_list.empty?
       error_message
     else
       puts user_name.pick_random_movie.title
     end
 
-  elsif user_choice == options.values[3]
+  elsif user_choice == options.values[3] #see movies in queue
     if user_name.show_movies_in_user_list.empty?
       error_message
     else
       puts user_name.show_movies_in_user_list
     end
 
-  elsif user_choice == options.values[4]
+  elsif user_choice == options.values[4] #show movie by genre
     genre = prompt.select("Select a genre:", genre_array)
     movies_with_genre = user_name.show_by_genre(genre)
       if movies_with_genre.empty?
@@ -50,10 +52,10 @@ while true
         puts movies_with_genre
       end
 
-  elsif user_choice == options.values[5]
+  elsif user_choice == options.values[5] #show all movies in database
     puts Movie.show_all_movies_in_database
 
-  elsif user_choice == options.values[6]
+  elsif user_choice == options.values[6] #exit
     puts "Thanks for using MovieQueueApp™! Goodbye!".blue.bold
     break
   end
