@@ -3,12 +3,10 @@ class User < ActiveRecord::Base
   has_many :movies, through: :list_items
 
   def show_movies_in_user_list
-    #will show all movies in a user's list(titles)
     movie_titles = ListItem.where(user_id:self.id).map{|item| item.movie.title}
   end
 
   def remove_movie_in_user_list(movie)
-    #removes a movie from their list/queue.
     found_list_item = self.list_items.find do |list_item|
       list_item.movie.title == movie
     end
@@ -16,12 +14,10 @@ class User < ActiveRecord::Base
   end
 
   def pick_random_movie
-    #picks a random movie from a given list
     self.movies.sample
   end
 
   def add_movie(title, genre, release_year)
-    #adds a movie to the database
     Movie.find_or_create_by(title: title, genre: genre, release_year: release_year)
   end
 
@@ -39,4 +35,5 @@ class User < ActiveRecord::Base
       movie.title
     end
   end
+
 end

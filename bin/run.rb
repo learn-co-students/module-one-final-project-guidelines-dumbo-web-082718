@@ -5,9 +5,7 @@ require_relative '../snippets/cli_methods.rb'
 introduction
 sleep(1)
 prompt = TTY::Prompt.new
-
 user_name =  get_user_name
-
 puts  "Hey #{user_name.name}!".blue.bold
 sleep(1)
 
