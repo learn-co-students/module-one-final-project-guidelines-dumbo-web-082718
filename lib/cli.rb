@@ -1,3 +1,5 @@
+Prompt = TTY::Prompt.new(interrupt: :exit)
+
 def initialize_user
   puts <<-ASCII
                            - WELCOME TO -
@@ -9,10 +11,10 @@ def initialize_user
      YP    88   YD ~Y8888P'  `Y88P' YP   YD      Y888888P    YP
   ASCII
 
-  case TTY::Prompt.new.select("Choose an option:", %w(Login Create\ account Exit))
+  case Prompt.select("Choose an option:", ["Login", "Create Account", "Exit"])
     when "Login"
       login
-    when "Create account"
+    when "Create Account"
       create_account
     when "Exit"
       exit
@@ -22,14 +24,14 @@ end
 
 def login
   login_user = loop do
-    login_username = TTY::Prompt.new.ask('Username:')
+    login_username = Prompt.ask('Username:')
     user_check = User.find_by(username:login_username)
     break user_check unless user_check == nil
     puts "That username does not exist."
   end
 
   loop do
-    password = TTY::Prompt.new.mask('Password:')
+    password = Prompt.mask('Password:')
     break if password == login_user.password
     puts "Your password is incorrect."
   end
@@ -41,35 +43,38 @@ end
 
 def create_account
   username = loop do
-    newusername = TTY::Prompt.new.ask("Create your username:")
+
+    newusername = Prompt.ask("Create your username:")
     username_check = User.find_by(username:newusername)
     break newusername if username_check == nil
     puts "That username is already taken."
+
   end
-  firstname = TTY::Prompt.new.ask("Enter your first name:")
-  lastname = TTY::Prompt.new.ask("Enter your last name:")
-  password = TTY::Prompt.new.mask("Create your password:")
+  firstname = Prompt.ask("Enter your first name:")
+  lastname = Prompt.ask("Enter your last name:")
+  password = Prompt.mask("Create your password:")
   #print ask yes/no
   $program_user = User.create(username:username,first_name:firstname,last_name:lastname,password:password)
 end
 
 
 def delete_account
-  if TTY::Prompt.new.yes?("Do you really want to delete your account?")
+  if Prompt.yes?("Do you really want to delete your account?")
     $program_user.reviews.delete_all
     $program_user.delete
-    puts "Goodbye forever!"
+    puts "Goodbye for now!"
 
     exit
   else
-    puts ":)"
+    puts "Thank you for staying with us!"
   end
 end
 
 
 def program_loop
   loop do
-    case main_what_do
+
+    case Prompt.select("What would you like to view?", ["User", "Food Trucks", "Reviews", "Exit"])
       when "User"
         user_loop
       when "Food Trucks"
@@ -79,72 +84,53 @@ def program_loop
       when "Exit"
         break
     end
+    
   end
   exit
 end
 
 
-def main_what_do
-  prompt = TTY::Prompt.new
-  prompt.select("What would you like to view?", %w(User Food\ Trucks Reviews Exit))
-end
-
-def user_what_do
-  prompt = TTY::Prompt.new
-  prompt.select("What would you like to do?", %w(Change\ First\ Name Change\ Last\ Name Change\ Password Delete\ Account Back))
-end
-
-
 def user_loop
   loop do
+
     puts "Username: #{$program_user.username} | First name: #{$program_user.first_name} | Last name: #{$program_user.last_name}"
-    case user_what_do
-    when "Change First Name"
-      new_name = TTY::Prompt.new.ask('What is your new first name?', default: $program_user.first_name)
-      $program_user.first_name = new_name
-      $program_user.save
-    when "Change Last Name"
-      last_name= TTY::Prompt.new.ask('What is your new last name?', default: $program_user.last_name)
-      $program_user.last_name = last_name
-      $program_user.save
-    when "Change Password"
-      loop do
-        password = TTY::Prompt.new.mask('Insert current password:')
-        break if password == $program_user.password
-        puts "Your password is incorrect."
-      end
-        new_password = TTY::Prompt.new.mask('Insert new password:')
-        $program_user.password = new_password
-    when "Delete Account"
-      delete_account
-    when "Back"
-      break
+
+    case Prompt.select("What would you like to do?", ["Change First Name", "Change Last Name", "Change Password", "Delete Account", "Back"])
+      when "Change First Name"
+        first_name = Prompt.ask('New first name:')
+        $program_user.update(first_name: first_name)
+      when "Change Last Name"
+        last_name = Prompt.ask('New last name:')
+        $program_user.update(last_name: last_name)
+      when "Change Password"
+        loop do
+          password = Prompt.mask('Current password:')
+          break if password == $program_user.password
+          puts "Your password is incorrect."
+        end
+          new_password = Prompt.mask('New password:')
+          $program_user.password = new_password
+      when "Delete Account"
+        delete_account
+      when "Back"
+        break
     end
   end
 end
 
 
-def foodtruck_what_do
-  prompt = TTY::Prompt.new
-  prompt.select("What would you like to do?", %w(View\ All Search\ By\ Name Search\ by\ Neighborhood Search\ By\ Cuisine Back))
-end
-
-
 def foodtruck_loop
   loop do
-    case foodtruck_what_do
-    when "View All"
-      print_foodtrucks
-    when "Search By Name"
-      name = TTY::Prompt.new
-      food_truck_name=name.ask('Food truck name:')
-      tp Foodtruck.where(name:food_truck_name)
-    when "Search by Neighborhood"
-      search_by(:neighborhood)
-    when "Search By Cuisine"
-      search_by(:cuisine)
-    when "Back"
-      break
+
+    case Prompt.select("What would you like to do?", ["View All", "Search By Neighborhood", "Search By Cuisine", "Back"])
+      when "View All"
+        search_by(:name)
+      when "Search By Neighborhood"
+        search_by(:neighborhood)
+      when "Search By Cuisine"
+        search_by(:cuisine)
+      when "Back"
+        break
     end
   end
 end
@@ -152,32 +138,36 @@ end
 
 def search_by(arg)
   array = Foodtruck.all.map {|foodtruck| foodtruck.send arg }.uniq.sort
-  arg_do = TTY::Prompt.new.select("Select a #{arg}", array, "Back")
-  if arg_do == "Back"
-    return
-  else
-    select_foodtruck("#{arg}":arg_do)
+  case result = Prompt.select("Select a #{arg}", array, "Back", filter:true)
+    when "Back"
+      return
+    else
+      if arg == :name
+        foodtruck_detail_menu(result)
+      else
+        select_foodtruck("#{arg}":result)
+      end
   end
 end
 
 
 def select_foodtruck(arg)
   foodtruck_array = Foodtruck.where(arg).map { |foodtruck| foodtruck.name }
-  foodtruck_do = TTY::Prompt.new.select("Select a foodtruck:", foodtruck_array, "Back")
-  if foodtruck_do == "Back"
-    return
-  else
-    truck = Foodtruck.find_by(name:foodtruck_do)
-    foodtruck_detail_menu(truck)
+  case truck_name = Prompt.select("Select a foodtruck:", foodtruck_array, "Back")
+    when "Back"
+      return
+    else
+      foodtruck_detail_menu(truck_name)
   end
 end
 
 
-def foodtruck_detail_menu(truck)
+def foodtruck_detail_menu(truck_name)
+  truck = Foodtruck.find_by(name:truck_name)
   loop do
     puts "Name: #{truck.name} | Average Rating: #{truck.avg_rating} | Neighborhood: #{truck.neighborhood} | Cuisine: #{truck.cuisine}"
-    foodtruck_deetz = TTY::Prompt.new.select("What would you like to do?", ["View Menu", "See Reviews", "Leave Review", "Back"])
-    case foodtruck_deetz
+
+    case Prompt.select("What would you like to do?", ["View Menu", "See Reviews", "Leave Review", "Back"])
       when "View Menu"
         view_menu(truck)
       when "See Reviews"
@@ -189,6 +179,7 @@ def foodtruck_detail_menu(truck)
     end
   end
 end
+
 
 def view_menu(truck)
   puts "Appetizers"
@@ -202,10 +193,9 @@ def view_menu(truck)
 end
 
 
-
 def review_loop
   loop do
-    case review_what_do
+    case Prompt..select("What would you like to do?", %w(View\ Your\ Reviews View\ All\ Reviews Create\ Review Back))
     when "View Your Reviews"
       tp Review.where(user_id:$program_user.id)
     when "View All Reviews"
@@ -219,17 +209,11 @@ def review_loop
 end
 
 
-def review_what_do
-  prompt = TTY::Prompt.new
-  prompt.select("What would you like to do?", %w(View\ Your\ Reviews View\ All\ Reviews Create\ Review Back))
-end
-
-
 def create_review
   food_truck = valid_truck?
-  title = TTY::Prompt.new.ask("Title:")
-  rating = TTY::Prompt.new.ask("Rating from 1-10:") { |q| q.in('1-10') }
-  comment = TTY::Prompt.new.ask("Comment:")
+  title = Prompt.ask("Title:")
+  rating = Prompt.ask("Rating from 1-10:") { |q| q.in('1-10') }
+  comment = Prompt.ask("Comment:")
   #Print and confirm with user if they want to submit with y/n
   Review.create(title:title,rating:rating,comment:comment,user_id:$program_user.id,foodtruck_id:food_truck.id)
 end
@@ -237,14 +221,9 @@ end
 
 def valid_truck?
   loop do
-    food_truck_name=TTY::Prompt.new.ask('Food truck name:')
+    food_truck_name=Prompt.new.ask('Food truck name:')
     food_truck = Foodtruck.find_by(name:food_truck_name)
     break food_truck unless food_truck == nil
     puts "Please enter a valid truck name."
   end
-end
-
-
-def print_foodtrucks
-  tp Foodtruck.all, "name", "avg_rating", "neighborhood", "cuisine"
 end
