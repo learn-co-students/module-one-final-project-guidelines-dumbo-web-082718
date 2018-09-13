@@ -9,9 +9,12 @@ As a user, I want to be able to leave and read reviews on food trucks.
 # TODO
 
 save foodtruck as favorite
-view favorites
-update/delete review through "view all your reviews"
+view favorites?
 input validation for account creation
+
+add comments
+add readme
+video??
 
 
 MAYBE - scrape food truck websites for real truck info????????

@@ -1,6 +1,6 @@
 require_relative '../config/environment'
 
-initialize_user
+Program_user = initialize_user
 
 loop do
   program_loop
