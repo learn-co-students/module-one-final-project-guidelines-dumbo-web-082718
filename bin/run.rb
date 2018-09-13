@@ -17,13 +17,14 @@ while true
     genre = prompt.select("Select a genre:".blue, genre_array)
     release_year = prompt.ask("Enter movie's release year:".blue)
     user_name.add_movie_to_database_and_queue(title, genre, release_year)
-
+    puts "#{title} was added to your queue!".green.bold
   elsif user_choice == options.values[1]
     movie = prompt.ask('Enter a movie title to remove:'.blue)
     if user_name.show_movies_in_user_list.empty?
       error_message
     else
       user_name.remove_movie_in_user_list(movie)
+      puts "#{movie} was removed from your queue!".green.bold
     end
 
   elsif user_choice == options.values[2]
