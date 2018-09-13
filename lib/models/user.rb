@@ -4,11 +4,7 @@ class User < ActiveRecord::Base
 
   def show_movies_in_user_list
     #will show all movies in a user's list(titles)
-
-  movie_titles = ListItem.where(user_id:self.id).map{|item| item.movie.title}
-
-     # movies.map do |movie|
-     #  movie.title
+    movie_titles = ListItem.where(user_id:self.id).map{|item| item.movie.title}
   end
 
   def remove_movie_in_user_list(movie)
@@ -43,6 +39,4 @@ class User < ActiveRecord::Base
       movie.title
     end
   end
-
-
 end

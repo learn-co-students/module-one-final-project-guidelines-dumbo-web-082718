@@ -7,14 +7,14 @@ sleep(1)
 
 prompt = TTY::Prompt.new
 
-user_name = get_user_name
+name =  get_user_name
 
-puts  "Hey #{user_name.name}!"
+puts  "Hey #{name.name}!"
 
 sleep(1)
 
 while true
-  sleep(2)
+  sleep(1)
   user_choice = prompt.select("What would you like to do?", options.values)
   if user_choice == options.values[0]
     title = prompt.ask('Enter a movie title:')
@@ -51,6 +51,7 @@ while true
   elsif user_choice == options.values[5]
     puts Movie.show_all_movies_in_database
   elsif user_choice == options.values[6]
+    puts "Thanks for using MovieQueueApp™! Goodbye!"
     break
   end
 end
