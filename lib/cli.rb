@@ -75,21 +75,18 @@ end
 
 
 def program_loop
-  loop do
 
-    case Prompt.select("What would you like to view?", ["User", "Food Trucks", "Reviews", "Exit"])
+    case Prompt.select("What would you like to view?", ["User", "Food Trucks", "My Reviews", "Exit"])
       when "User"
         user_loop
       when "Food Trucks"
         foodtruck_loop
-      when "Reviews"
-        review_loop
+      when "My Reviews"
+        my_reviews
       when "Exit"
-        break
+        exit
     end
 
-  end
-  exit
 end
 
 
@@ -198,20 +195,45 @@ def category_table(arg, truck, table)
 end
 
 
-def review_loop
+# def review_loop
+#   loop do
+#     case Prompt.select("What would you like to do?", ["View Your Reviews", "View All Reviews", "Create Review", "Back"])
+#       when "View Your Reviews"
+#         tp Review.where(user_id:$program_user.id)
+#       when "View All Reviews"
+#         tp Review.all, "title", "rating", "comment", "user.username", "foodtruck.name"
+#       when "Create Review"
+#         create_review
+#       when "Back"
+#         break
+#     end
+#   end
+# end
+
+def my_reviews
+  review_array = $program_user.reviews.map { |review| {name: "#{review.foodtruck.name} - #{review.title}", value: review} }
+  case result = Prompt.select("Select a review: ", review_array, "Back")
+    when "Back"
+      return
+    else
+      my_review_detail(result)
+  end
+end
+
+def my_review_detail(review)
+  puts "Title: #{review.title} | Rating: #{review.rating} | Comment: #{review.comment} | Foodtruck: #{review.foodtruck.name}"
   loop do
-    case Prompt.select("What would you like to do?", ["View Your Reviews", "View All Reviews", "Create Review", "Back"])
-      when "View Your Reviews"
-        tp Review.where(user_id:$program_user.id)
-      when "View All Reviews"
-        tp Review.all, "title", "rating", "comment", "user.username", "foodtruck.name"
-      when "Create Review"
-        create_review
-      when "Back"
-        break
+    case Prompt.select("What would you like to do?", ["Edit Review", "Delete Review", "Back"])
+    when "Edit Review"
+      #edit_review
+    when "Delete Review"
+      #delete_review
+    when "Back"
+      break
     end
   end
 end
+
 
 
 def create_review
@@ -230,7 +252,6 @@ def create_review_selected(truck)
     comment = Prompt.ask("Comment:")
     if Prompt.yes?("Submit this review for #{truck.name}?:")
       Review.create(title:title,rating:rating,comment:comment,user_id:$program_user.id,foodtruck_id:truck.id)
-    else
       break
     end
   end
