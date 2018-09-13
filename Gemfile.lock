@@ -12,32 +12,16 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
     arel (7.1.4)
     coderay (1.1.1)
+    colorize (0.8.1)
     concurrent-ruby (1.0.5)
-    deepopenstruct (0.1.2)
-    domain_name (0.5.20180417)
-      unf (>= 0.0.5, < 1.0.0)
-    enceladus (0.0.8)
-      hashugar (~> 1.0.1)
-      rest-client (~> 1.8.0, >= 1.8.0)
     equatable (0.5.0)
-    hashugar (1.0.1)
     hitimes (1.3.0)
-    http-cookie (1.0.3)
-      domain_name (~> 0.5)
-    httparty (0.16.2)
-      multi_xml (>= 0.5.2)
     i18n (0.8.1)
-    json (2.1.0)
     method_source (0.8.2)
-    mime-types (2.99.3)
     minitest (5.10.1)
-    multi_xml (0.6.0)
     necromancer (0.4.0)
-    netrc (0.11.0)
     pastel (0.7.2)
       equatable (~> 0.5.0)
       tty-color (~> 0.4.0)
@@ -45,20 +29,10 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    public_suffix (3.0.3)
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
     require_all (1.3.3)
-    rest-client (1.8.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
-    ruby-tmdb3 (0.3.4)
-      addressable
-      deepopenstruct
-      deepopenstruct (>= 0.1.2)
-      json
     sinatra (1.4.8)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -68,8 +42,6 @@ GEM
       sinatra (>= 1.0)
     slop (3.6.0)
     sqlite3 (1.3.13)
-    themoviedb (1.0.1)
-      httparty
     thread_safe (0.3.6)
     tilt (2.0.7)
     timers (4.1.2)
@@ -89,22 +61,17 @@ GEM
     tty-screen (0.6.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.7.5)
     wisper (2.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  enceladus
+  colorize
   pry
   require_all
-  ruby-tmdb3
   sinatra-activerecord
   sqlite3
-  themoviedb
   tty-prompt
 
 BUNDLED WITH
