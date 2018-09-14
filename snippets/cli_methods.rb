@@ -90,11 +90,12 @@ def methods
 
     elsif user_choice == options.values[4] #show movie by genre
       genre = prompt.select("Select a genre:", genre_array)
-      movies_with_genre = user_name.show_by_genre(genre)
+      # movies_with_genre = user_name.show_by_genre(genre)
+        movies_with_genre = user_name.movies_genres(genre)
         if movies_with_genre.empty?
           puts "YOU DO NOT HAVE ANY MOVIES SAVED IN YOUR QUEUE WITH THIS GENRE".red.bold
         else
-          puts movies_with_genre
+        puts movies_with_genre
         end
 
     elsif user_choice == options.values[5] #show all movies in database

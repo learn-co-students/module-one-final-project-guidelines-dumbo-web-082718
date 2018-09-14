@@ -6,6 +6,13 @@ class User < ActiveRecord::Base
     movie_titles = ListItem.where(user_id:self.id).map{|item| item.movie.title}
   end
 
+  def movies_genres(genre)
+    movie_titles = ListItem.where(user_id:self.id)
+    one = movie_titles.select { |listitem| listitem.movie.genre == genre }
+    two = one.map { |listitem| listitem.movie.title }
+    # binding.pry
+  end
+
   def remove_movie_in_user_list(movie)
     found_list_item = self.list_items.find do |list_item|
       list_item.movie.title == movie
