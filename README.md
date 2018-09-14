@@ -20,6 +20,8 @@ The MovieQueueApp™ will let you keep track of the movies you want to watch! A 
 
 #### Seeding the Database
 
+Get your API key [here](https://www.themoviedb.org/account)
+
 Go to the seed.rb inside of the db folder.
 
 ```movie = Tmdb::Search.movie('movie_name')```
