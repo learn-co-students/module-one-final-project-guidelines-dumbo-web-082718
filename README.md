@@ -8,11 +8,15 @@ The MovieQueueApp™ will let you keep track of the movies you want to watch! A 
 4) View movies in queue by genre or
 5) View all movies that are in the database
 
+The app works with The Movie db API. If you want to use the API, following instruction for Seeding the Database.
+If you want to populate the database with your own data, add movies through the CLI.
+
 ### Getting Started 
 
 1) Fork and clone the repository
 2) bundle install
-3) run the file - bin/run.rb
+3) run ```rake db:migrate``` 
+4) run the file - bin/run.rb
 
 ### Running the App
 
