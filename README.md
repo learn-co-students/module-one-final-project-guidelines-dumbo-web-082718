@@ -1,4 +1,4 @@
-#MovieQueueApp™
+# MovieQueueApp™
 
 The MovieQueueApp™ will let you keep track of the movies you want to watch! A user can...
 
