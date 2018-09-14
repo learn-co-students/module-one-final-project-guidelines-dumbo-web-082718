@@ -17,3 +17,11 @@ The MovieQueueApp™ will let you keep track of the movies you want to watch! A 
 ### Running the App
 
 ```ruby bin/run.rb```
+
+#### Seeding the Database
+
+Go to the seed.rb inside of the db folder.
+
+```movie = Tmdb::Search.movie('movie_name')```
+
+replace movie_name with movie topic of choice to add movies from The Movie Db API to the database.
