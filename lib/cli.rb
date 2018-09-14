@@ -29,6 +29,9 @@ def login
     user = User.find_by(username:username, password:password) # sets variable equal to user instance matching input, or nil if not found
     break user unless user == nil # returns user instance on break, puts line below and continues loop if user info doesnt match input
     puts "Your login information is incorrect."
+    if Prompt.yes?('Go back to main screen?')
+      break nil
+    end
   end
 end # login
 
