@@ -14,7 +14,7 @@ If you want to populate the database with your own data, add movies through the 
 ### Getting Started 
 
 1) ```Fork``` this repository
-2)```clone``` your repository
+2) ```Clone``` your repository
 3) ```bundle install```
 4) run ```rake db:migrate``` 
 5) run the file - bin/run.rb
