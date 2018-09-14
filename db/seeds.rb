@@ -10,7 +10,7 @@ def get_genre_list
 end
 
 
-Tmdb::Api.key("0daab27198c8748989487d142cf08103")
+Tmdb::Api.key("your key here")
 Tmdb::Api.language("en")
 
 movie = Tmdb::Search.movie('Titan')
