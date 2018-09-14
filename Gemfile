@@ -6,4 +6,5 @@ gem "sqlite3"
 gem "require_all"
 gem "tty-prompt"
 gem "tty-table"
+gem "pry"
 gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'

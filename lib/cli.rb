@@ -130,7 +130,8 @@ def search_by(arg) # takes in an argument, either ":name", ":neighborhood", or "
       return
     else
       if arg == :name # if the arg is name, the result is going to be an individual food truck, so we want to go to the detail view of that food truck, since #select_foodtruck would only show one
-        foodtruck_detail_menu(result)
+        truck = Foodtruck.find_by(name:result)
+        foodtruck_detail_menu(truck)
       else
         select_foodtruck("#{arg}":result) # passes along argument passed into #search_by as the key to a hash, with the value being the result from the user selection, for example: {neighborhood: "University Oaks"}
       end
@@ -139,18 +140,18 @@ end # search_by
 
 
 def select_foodtruck(arg) #takes in a hash as an argument from #search_by
-  foodtruck_array = Foodtruck.where(arg).map { |foodtruck| foodtruck.name } # sets a variable equal to an array. that array is created by mapping over each food truck instance with conditions equal to the hash passed in, and using its name for readability.
-  case truck_name = Prompt.select("Select a foodtruck:", foodtruck_array, "Back") # sets variable equal to return value from selection (which would be a truck name). uses above array as list of options
+  foodtruck_array = Foodtruck.where(arg).map { |foodtruck| {name:"#{foodtruck.name}", value: foodtruck} } # sets a variable equal to an array. that array is created by mapping over each food truck instance with conditions equal to the hash passed in, and using its name for readability.
+  case truck = Prompt.select("Select a foodtruck:", foodtruck_array, "Back") # sets variable equal to return value from selection (which would be a truck name). uses above array as list of options
     when "Back"
       return # ends method and returns to #foodtruck_loop
     else
-      foodtruck_detail_menu(truck_name)
+      foodtruck_detail_menu(truck)
   end
 end # select_foodtruck
 
 
-def foodtruck_detail_menu(truck_name) # detail view for trucks
-  truck = Foodtruck.find_by(name:truck_name) # finds foodtruck instance by name passed in and sets variable equal to the instance
+def foodtruck_detail_menu(truck) # detail view for trucks
+  # truck = Foodtruck.find_by(name:truck_name) # finds foodtruck instance by name passed in and sets variable equal to the instance
   loop do
     puts "Name: #{truck.name} | Average Rating: #{truck.avg_rating} | Neighborhood: #{truck.neighborhood} | Cuisine: #{truck.cuisine}"
 

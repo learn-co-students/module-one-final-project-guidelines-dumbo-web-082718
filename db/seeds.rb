@@ -40,6 +40,6 @@ end
     name: Faker::Food.dish,
     price: rand(1..15),
     category: food_category_seed.sample,
-    foodtruck_id: rand(1..15)
+    foodtruck_id: rand(1..25)
   )
 end
