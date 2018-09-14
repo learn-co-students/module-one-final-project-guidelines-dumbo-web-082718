@@ -24,8 +24,8 @@ end # initialize_user
 
 def login
   loop do
-    username = Prompt.ask('Username:')
-    password = Prompt.mask('Password:')
+    username = Prompt.ask('Username:') { |q| q.modify :strip }
+    password = Prompt.mask('Password:') { |q| q.modify :strip }
     user = User.find_by(username:username, password:password) # sets variable equal to user instance matching input, or nil if not found
     break user unless user == nil # returns user instance on break, puts line below and continues loop if user info doesnt match input
     puts "Your login information is incorrect."
@@ -42,9 +42,9 @@ def create_account
       puts "That username is already taken."
     end
 
-    firstname = Prompt.ask("Enter your first name:")
-    lastname = Prompt.ask("Enter your last name:")
-    password = Prompt.mask("Create your password:")
+    firstname = Prompt.ask("Enter your first name:") { |q| q.modify :strip }
+    lastname = Prompt.ask("Enter your last name:") { |q| q.modify :strip }
+    password = Prompt.mask("Create your password:") { |q| q.modify :strip }
     if Prompt.yes?("Is this information correct?:") # confirmation for correct info
       break User.create(username:username,first_name:firstname,last_name:lastname,password:password) # creates user and returns user instance on break if yes was selected
     end
@@ -85,18 +85,18 @@ def user_loop # user menu
 
     case Prompt.select("What would you like to do?", ["Change First Name", "Change Last Name", "Change Password", "Delete Account", "Back"])
       when "Change First Name"
-        first_name = Prompt.ask('New first name:')
+        first_name = Prompt.ask('New first name:') { |q| q.modify :strip }
         Program_user.update(first_name: first_name) # sets first name to user input
       when "Change Last Name"
-        last_name = Prompt.ask('New last name:')
+        last_name = Prompt.ask('New last name:') { |q| q.modify :strip }
         Program_user.update(last_name: last_name) # sets last name to user input
       when "Change Password"
         loop do
-          password = Prompt.mask('Current password:')
+          password = Prompt.mask('Current password:') { |q| q.modify :strip }
           break if password == Program_user.password # checks user if knows current password, loops if incorrect
           puts "Your password is incorrect."
         end
-          new_password = Prompt.mask('New password:')
+          new_password = Prompt.mask('New password:') { |q| q.modify :strip }
           Program_user.update(password: new_password) #sets password to user input
       when "Delete Account"
         delete_account
@@ -213,10 +213,10 @@ end # my_review_detail
 
 def create_review(truck) # takes in instance of food truck
   loop do
-    title = Prompt.ask("Title:")
+    title = Prompt.ask("Title:") { |q| q.modify :strip }
     rating = Prompt.ask("Rating from 1-10:") { |q| q.in('1-10') } # TTY-Prompt syntax for only allowing values in range
     comment = Prompt.ask("Comment:")
-    if Prompt.yes?("Submit this review for #{truck.name}?:") # confirmation to create review
+    if Prompt.yes?("Submit this review for #{truck.name}?:") { |q| q.modify :strip } # confirmation to create review
       break Review.create(title:title,rating:rating,comment:comment,user_id:Program_user.id,foodtruck_id:truck.id) # breaks loop and creates review
     end
   end
@@ -225,9 +225,9 @@ end # create_review
 
 def edit_review(review) # takes in instance of review
   loop do
-    title = Prompt.ask("Title:", default:review.title)
+    title = Prompt.ask("Title:", default:review.title) { |q| q.modify :strip }
     rating = Prompt.ask("Rating from 1-10:") { |q| q.in('1-10') }
-    comment = Prompt.ask("Comment:", default:review.comment)
+    comment = Prompt.ask("Comment:", default:review.comment) { |q| q.modify :strip }
     if Prompt.yes?("Edit this review for #{review.foodtruck.name}?:") # confirmation to edit review
       break review.update(title:title,rating:rating,comment:comment) # breaks and updates review with user input
     end
